@@ -189,6 +189,7 @@ Artifacts are written under `composeuikit/build/repo`. Add that folder as a Mave
 - [Component catalogue](docs/components.md)
 - [Theming](docs/theming.md)
 - [Accessibility and RTL](docs/accessibility.md)
+- [Publishing](docs/publishing.md)
 - [Contributing](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
 
