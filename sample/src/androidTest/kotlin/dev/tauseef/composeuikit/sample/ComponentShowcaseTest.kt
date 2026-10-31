@@ -1,6 +1,5 @@
 package dev.tauseef.composeuikit.sample
 
-import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -20,19 +19,19 @@ class ComponentShowcaseTest {
     @Test
     fun sample_displaysComponentPlayground() {
         composeRule.onNodeWithText("ComposeUIKit").assertIsDisplayed()
-        composeRule.onNodeWithText("Buttons").assertExists()
+        composeRule.onNodeWithText("Buttons").assertIsDisplayed()
     }
 
     @Test
     fun primaryButton_displaysSnackbarFeedback() {
         composeRule.onNodeWithText("Primary action").performClick()
-        composeRule.onNodeWithText("Primary action clicked").assertExists()
+        composeRule.onNodeWithText("Primary action clicked").assertIsDisplayed()
     }
 
     @Test
     fun nameField_acceptsTextInput() {
         composeRule.onNodeWithText("Full name").performScrollTo()
         composeRule.onNodeWithText("Enter your name").performTextInput("Tauseef")
-        composeRule.onNodeWithText("Tauseef").assertExists()
+        composeRule.onNodeWithText("Tauseef").assertIsDisplayed()
     }
 }
