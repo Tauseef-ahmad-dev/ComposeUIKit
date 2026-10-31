@@ -1,6 +1,7 @@
 package dev.tauseef.composeuikit.sample
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -33,5 +34,15 @@ class ComponentShowcaseTest {
         composeRule.onNodeWithText("Full name").performScrollTo()
         composeRule.onNodeWithText("Enter your name").performTextInput("Tauseef")
         composeRule.onNodeWithText("Tauseef").assertIsDisplayed()
+    }
+
+    @Test
+    fun disabledButton_doesNotAcceptInteraction() {
+        composeRule.onNodeWithText("Disabled action").performScrollTo().assertIsNotEnabled()
+    }
+
+    @Test
+    fun loadingButton_preventsRepeatedSubmission() {
+        composeRule.onNodeWithText("Saving changes").performScrollTo().assertIsNotEnabled()
     }
 }

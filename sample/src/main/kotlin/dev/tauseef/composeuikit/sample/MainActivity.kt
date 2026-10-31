@@ -125,6 +125,19 @@ class MainActivity : ComponentActivity() {
                                     variant = UIKitButtonVariant.Text,
                                     modifier = Modifier.fillMaxWidth()
                                 )
+
+                                UIKitButton(
+                                    text = "Disabled action",
+                                    onClick = {},
+                                    enabled = false,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                UIKitButton(
+                                    text = "Saving changes",
+                                    onClick = {},
+                                    loading = true,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
                             }
                         }
 
