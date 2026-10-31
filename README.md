@@ -96,22 +96,19 @@ Use a compatible Android Studio version with Android SDK 36 installed.
 4. Select the `sample` run configuration.
 5. Run it on an emulator or Android device.
 
-The CI pipeline provisions Gradle 8.13. If you have a local Gradle installation, the same tasks can be run with:
+The repository includes the **Gradle Wrapper**, pinned to Gradle 8.13. You do not need to install Gradle separately. On the first run, the wrapper downloads the distribution and verifies it against the official SHA-256 checksum.
+
+Run the following commands from the repository root:
 
 ```bash
-gradle :composeuikit:assembleRelease
-gradle :composeuikit:test
-gradle :composeuikit:lint
-gradle :sample:assembleDebug
+./gradlew :composeuikit:assembleRelease
+./gradlew :composeuikit:test
+./gradlew :composeuikit:lint
+./gradlew :sample:assembleDebug
+./gradlew :sample:assembleDebugAndroidTest
 ```
 
-To create the standard Gradle wrapper files locally, run:
-
-```bash
-gradle wrapper --gradle-version 8.13
-```
-
-Commit the generated wrapper scripts and `gradle/wrapper` directory if you want wrapper-based builds in your clone.
+On Windows, use `gradlew.bat` instead of `./gradlew`. Android Studio also detects the checked-in wrapper automatically.
 
 ## Use the library in the sample project
 
