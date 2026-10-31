@@ -11,7 +11,8 @@ All notable project changes are documented here.
 - Added dialogs, confirmation dialog, modal bottom sheet, snackbar host, loader, empty state, card, and divider.
 - Rebuilt the sample app as an interactive component playground.
 - Added light/dark Compose previews, token unit tests, and sample instrumentation tests.
-- Added architecture, component, theming, and accessibility documentation.
+- Added architecture, component, theming, accessibility, and publishing documentation.
+- Configured a local Maven release publication with POM metadata and a sources JAR.
 - Added a visual component-gallery preview to the README.
 
 ## 0.1.0 — Initial development scaffold
