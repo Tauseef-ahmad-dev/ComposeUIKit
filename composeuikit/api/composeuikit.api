@@ -101,6 +101,7 @@ public final class dev/tauseef/composeuikit/theme/UIKitColors {
 	public final fun getLightBackground-0d7_KjU ()J
 	public final fun getLightSurface-0d7_KjU ()J
 	public final fun getOnPrimary-0d7_KjU ()J
+	public final fun getOnPrimaryDark-0d7_KjU ()J
 	public final fun getPrimary-0d7_KjU ()J
 	public final fun getPrimaryDark-0d7_KjU ()J
 	public final fun getSecondary-0d7_KjU ()J
