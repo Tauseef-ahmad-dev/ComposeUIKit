@@ -1,7 +1,6 @@
 package dev.tauseef.composeuikit.components.inputs
 
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,24 +22,29 @@ fun UIKitPasswordField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: String = "Password",
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    errorMessage: String? = null
 ) {
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
-    OutlinedTextField(
+    UIKitTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
-        label = { Text(label) },
+        label = label,
         enabled = enabled,
         singleLine = true,
+        errorMessage = errorMessage,
         visualTransformation = if (passwordVisible) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
         },
         trailingIcon = {
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            IconButton(
+                onClick = { passwordVisible = !passwordVisible },
+                enabled = enabled
+            ) {
                 Text(if (passwordVisible) "Hide" else "Show")
             }
         }
