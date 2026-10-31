@@ -188,3 +188,4 @@ public final class dev/tauseef/composeuikit/theme/UIKitTokensKt {
 public final class dev/tauseef/composeuikit/theme/UIKitTypographyKt {
 	public static final fun getUIKitTypography ()Landroidx/compose/material3/Typography;
 }
+
