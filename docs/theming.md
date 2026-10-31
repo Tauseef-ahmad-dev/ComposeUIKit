@@ -49,4 +49,4 @@ Column(verticalArrangement = Arrangement.spacedBy(tokens.spacing.large)) {
 
 Available spacing values are 4, 8, 12, 16, 24, and 32 dp. Default corner radii are 6, 10, 16, and 24 dp.
 
-The default palette is a starting point, not a requirement. Applications should validate contrast and brand alignment for their own theme.
+The default light primary/foreground pair and dark primary/foreground pair are checked against the WCAG AA 4.5:1 text contrast target in JVM tests. The dark palette uses a dark foreground on its light primary color. Custom color schemes remain the application's responsibility: validate contrast and brand alignment for every component state.

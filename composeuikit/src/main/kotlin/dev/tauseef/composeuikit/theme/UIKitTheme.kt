@@ -21,7 +21,7 @@ private val LightColorScheme = lightColorScheme(
 
 private val DarkColorScheme = darkColorScheme(
     primary = UIKitColors.PrimaryDark,
-    onPrimary = UIKitColors.OnPrimary,
+    onPrimary = UIKitColors.OnPrimaryDark,
     secondary = UIKitColors.SecondaryDark,
     background = UIKitColors.DarkBackground,
     surface = UIKitColors.DarkSurface,

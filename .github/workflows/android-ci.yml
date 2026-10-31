@@ -42,27 +42,21 @@ jobs:
           ./gradlew :sample:assembleDebugAndroidTest
           ./gradlew :composeuikit:publishReleasePublicationToLocalRepository
 
-      - name: Generate public API snapshot
-        run: ./gradlew apiDump
+      - name: Validate public API compatibility
+        run: ./gradlew apiCheck
 
-      - name: Locate generated API snapshot
-        run: |
-          echo "Generated Kotlin API dump files:"
-          find . -type f -name '*.api' -not -path './.gradle/*' -print
-          test -n "$(find . -type f -name '*.api' -not -path './.gradle/*' -print -quit)"
-
-      - name: Upload API snapshot for review
+      - name: Upload committed API baseline for review
         uses: actions/upload-artifact@v7
         with:
-          name: composeuikit-api-snapshot
-          path: |
-            **/*.api
+          name: composeuikit-api-baseline
+          path: composeuikit/api/composeuikit.api
           if-no-files-found: error
           retention-days: 7
 
   android-emulator-validation:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
     env:
@@ -83,6 +77,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
 
       - name: Run sample UI tests and capture README screenshots
+        timeout-minutes: 25
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
