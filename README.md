@@ -199,16 +199,12 @@ Artifacts are written under `composeuikit/build/repo`. Add that folder as a Mave
 
 ## Quality checks
 
-GitHub Actions currently runs:
+GitHub Actions uses two validation paths to avoid duplicate and unnecessarily serial work:
 
-- Gradle Wrapper integrity validation
-- Public Kotlin API compatibility checks against the committed API baseline
-- Library release compilation, JVM unit tests and Android lint
-- Sample debug compilation and UI-test compilation
-- Local Maven publication verification
-- Sample instrumentation tests on an Android emulator
+- Pull requests to `main`: Gradle Wrapper integrity, library release compilation, JVM unit tests, Android lint, sample debug and instrumentation APK compilation, local Maven publication verification, and public API compatibility checks.
+- Pushes to `main` (and manual dispatch): the same build checks plus sample instrumentation tests on an Android emulator.
 
-The Android emulator job runs UI tests with read-only repository permissions and uploads screenshot captures as a workflow artifact. A separate, main-only job commits refreshed README screenshots when the workflow is manually dispatched on `main` or when a commit message contains `[capture-screenshots]`.
+The expensive emulator suite runs once after changes reach `main`, rather than being repeated on both a feature-branch push and its pull request. On `main`, build validation and emulator validation run in parallel. The emulator job has a bounded boot timeout and overall runtime. Screenshot capture is opt-in: manually dispatch the workflow on `main` or include `[capture-screenshots]` in a main-branch commit message. The emulator job uploads captures as an artifact; a separate main-only job with write permission commits them.
 
 Sample instrumentation tests are included in the repository and can be run on a connected emulator/device with:
 
