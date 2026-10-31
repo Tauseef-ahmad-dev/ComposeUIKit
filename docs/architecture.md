@@ -34,7 +34,7 @@ Prefer state hoisting for values that affect application behaviour. For example,
 
 ## Dependency policy
 
-Use Material 3 and Compose UI as implementation dependencies. Promote a dependency to `api` only when its types are part of ComposeUIKit's public API. Keep the runtime dependency graph small.
+Compose runtime, Compose UI, Compose UI graphics, and Material 3 are exposed with Gradle's `api` configuration because their types appear in public composable and theme signatures. Tooling, preview-only, and test dependencies remain non-transitive. Keep the runtime dependency graph small and promote no other dependency to `api` unless its types become part of the public API.
 
 ## Change policy
 
