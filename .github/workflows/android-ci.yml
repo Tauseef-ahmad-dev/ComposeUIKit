@@ -45,3 +45,6 @@ jobs:
 
       - name: Compile sample UI tests
         run: gradle :sample:assembleDebugAndroidTest
+
+      - name: Verify Maven publication
+        run: gradle :composeuikit:publishReleasePublicationToLocalRepository
