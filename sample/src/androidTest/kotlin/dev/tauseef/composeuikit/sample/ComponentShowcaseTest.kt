@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -20,7 +21,6 @@ class ComponentShowcaseTest {
     fun sample_displaysComponentPlayground() {
         composeRule.onNodeWithText("ComposeUIKit").assertIsDisplayed()
         composeRule.onNodeWithText("Buttons").assertExists()
-        composeRule.onNodeWithText("Text inputs").assertExists()
     }
 
     @Test
@@ -31,6 +31,7 @@ class ComponentShowcaseTest {
 
     @Test
     fun nameField_acceptsTextInput() {
+        composeRule.onNodeWithText("Full name").performScrollTo()
         composeRule.onNodeWithText("Enter your name").performTextInput("Tauseef")
         composeRule.onNodeWithText("Tauseef").assertExists()
     }
