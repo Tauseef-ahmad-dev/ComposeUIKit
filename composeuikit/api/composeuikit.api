@@ -128,6 +128,10 @@ public final class dev/tauseef/composeuikit/theme/UIKitCornerRadius {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class dev/tauseef/composeuikit/theme/UIKitShapesKt {
+	public static final fun getUIKitShapes ()Landroidx/compose/material3/Shapes;
+}
+
 public final class dev/tauseef/composeuikit/theme/UIKitSpacing {
 	public static final field $stable I
 	public synthetic fun <init> (FFFFFFILkotlin/jvm/internal/DefaultConstructorMarker;)V
