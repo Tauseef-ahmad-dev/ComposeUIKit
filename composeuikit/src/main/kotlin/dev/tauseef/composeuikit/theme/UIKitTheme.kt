@@ -2,8 +2,11 @@ package dev.tauseef.composeuikit.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 
@@ -28,24 +31,31 @@ private val DarkColorScheme = darkColorScheme(
 /**
  * Provides ComposeUIKit's default Material 3 theme and design tokens.
  *
- * Applications may continue to use their own MaterialTheme outside this wrapper.
+ * Supply [colorScheme], [typography], [shapes], or [tokens] to adapt the library
+ * to an application's design system. If [colorScheme] is omitted, a light or
+ * dark default is selected using [darkTheme].
  */
 @Composable
 fun UIKitTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    colorScheme: ColorScheme? = null,
+    typography: Typography = UIKitTypography,
+    shapes: Shapes = UIKitShapes,
+    tokens: UIKitTokens = UIKitTokens.Default,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val resolvedColorScheme = colorScheme ?: if (darkTheme) {
+        DarkColorScheme
+    } else {
+        LightColorScheme
+    }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = UIKitTypography,
-        shapes = UIKitShapes,
-        content = {
-            CompositionLocalProvider(
-                LocalUIKitTokens provides UIKitTokens.Default,
-                content = content
-            )
-        }
-    )
+    CompositionLocalProvider(LocalUIKitTokens provides tokens) {
+        MaterialTheme(
+            colorScheme = resolvedColorScheme,
+            typography = typography,
+            shapes = shapes,
+            content = content
+        )
+    }
 }
