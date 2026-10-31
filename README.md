@@ -164,6 +164,16 @@ UIKitButton(
 )
 ```
 
+### Publish to a local Maven repository
+
+The library has a release publication configured with a sources JAR and POM metadata. To produce a local Maven repository for integration testing:
+
+```bash
+gradle :composeuikit:publishReleasePublicationToLocalRepository
+```
+
+Artifacts are written under `composeuikit/build/repo`. Add that folder as a Maven repository in a separate test app to verify a consumer-style dependency. **ComposeUIKit is not yet published to Maven Central**; signing, namespace verification, credentials, and a stable API review are still required before a public release.
+
 ## Design principles
 
 1. **State belongs to the consumer.** Components accept values and callbacks rather than owning business state.
