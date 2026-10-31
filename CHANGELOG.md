@@ -4,6 +4,10 @@ All notable project changes are documented here.
 
 ## Unreleased
 
+_No unreleased changes._
+
+## 0.1.0 — Initial development release (2026-10-31)
+
 - Expanded the Material 3 theme API with color scheme, typography, shape, and token overrides.
 - Added loading-aware buttons and an accessible icon-only button.
 - Improved text, password, and search field APIs.
@@ -24,8 +28,6 @@ All notable project changes are documented here.
 - Improved dark-theme primary button text contrast and added a WCAG AA contrast regression test.
 - Expanded emulator tests for accessibility descriptions, validation errors, and empty-state recovery actions.
 - Isolated screenshot publishing into a main-only job with write permissions; emulator validation remains read-only.
-
-## 0.1.0 — Initial development scaffold
 
 - Added Android library and sample application modules.
 - Added Material 3 theme and design token foundation.
