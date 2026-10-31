@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performClick
@@ -23,10 +24,6 @@ class ComponentShowcaseTest {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    private fun settleUi() {
-        composeRule.waitForIdle()
-    }
-
     /**
      * Scroll the LazyColumn itself to an item before querying its descendants.
      * LazyColumn only composes visible items, so calling performScrollTo() on an
@@ -35,7 +32,6 @@ class ComponentShowcaseTest {
     private fun scrollTo(text: String) {
         composeRule.onNodeWithTag("component-playground-list")
             .performScrollToNode(hasText(text))
-        settleUi()
     }
 
     @Test
@@ -54,7 +50,7 @@ class ComponentShowcaseTest {
     @Test
     fun nameField_acceptsTextInput() {
         scrollTo("Full name")
-        composeRule.onNodeWithText("Enter your name").performTextInput("Tauseef")
+        composeRule.onNodeWithTag("sample-name-field").performTextInput("Tauseef")
         settleUi()
         composeRule.onNodeWithText("Tauseef").assertIsDisplayed()
     }
@@ -76,7 +72,7 @@ class ComponentShowcaseTest {
     @Test
     fun dropdown_selectsAndDisplaysChosenOption() {
         scrollTo("Category")
-        composeRule.onNodeWithText("Select an option").performClick()
+        composeRule.onNodeWithTag("sample-category-dropdown").performClick()
         settleUi()
         composeRule.onNodeWithText("Development").performClick()
         settleUi()
