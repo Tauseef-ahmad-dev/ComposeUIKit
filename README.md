@@ -20,9 +20,12 @@ The project is designed for real application teams: APIs are state-hoisted where
 
 ## Component showcase
 
-![ComposeUIKit component showcase](docs/assets/component-showcase.svg)
+<p align="center">
+  <img src="docs/assets/screenshots/component-overview.png" width="49%" alt="ComposeUIKit buttons and text inputs running in an Android emulator" />
+  <img src="docs/assets/screenshots/forms-and-selection.png" width="49%" alt="ComposeUIKit form, selection, and feedback components running in an Android emulator" />
+</p>
 
-*Illustrative visual preview of the interactive sample gallery. This is a vector design preview, not a screenshot captured from an Android emulator. Run the sample app for the live components.*
+<p align="center"><em>Real emulator captures from the ComposeUIKit sample app. The screenshot workflow can be rerun from GitHub Actions.</em></p>
 
 ## Highlights
 
@@ -65,10 +68,11 @@ ComposeUIKit/
 │       │       ├── sheets/
 │       │       ├── feedback/
 │       │       └── layout/
-│       ├── test/                 # JVM unit tests
-│       └── androidTest/          # Library instrumentation tests
+│       └── test/                 # JVM unit tests
 ├── sample/                       # Interactive consumer app
-│   └── src/androidTest/          # Sample UI tests
+│   └── src/
+│       ├── main/
+│       └── androidTest/          # Sample UI tests
 ├── docs/                         # Architecture and API guides
 ├── gradle/libs.versions.toml
 └── .github/workflows/            # CI
@@ -196,15 +200,19 @@ Artifacts are written under `composeuikit/build/repo`. Add that folder as a Mave
 
 GitHub Actions currently runs:
 
-- Library release compilation
-- Library JVM unit tests
+- Gradle Wrapper integrity validation
+- Library release compilation and JVM unit tests
 - Android lint
 - Sample debug compilation
+- Sample UI-test compilation
+- Local Maven publication verification
+
+A dedicated emulator-capture job can be run manually or by using the `[capture-screenshots]` commit marker. It launches the sample app on an Android emulator and refreshes the README screenshots.
 
 Sample instrumentation tests are included in the repository and can be run on a connected emulator/device with:
 
 ```bash
-gradle :sample:connectedDebugAndroidTest
+./gradlew :sample:connectedDebugAndroidTest
 ```
 
 ## Roadmap

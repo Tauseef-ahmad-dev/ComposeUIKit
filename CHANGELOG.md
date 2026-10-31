@@ -14,6 +14,9 @@ All notable project changes are documented here.
 - Added architecture, component, theming, accessibility, and publishing documentation.
 - Configured a local Maven release publication with POM metadata and a sources JAR.
 - Added a visual component-gallery preview to the README.
+- Added the official Gradle 8.13 Wrapper with distribution checksum verification.
+- Updated CI to build through the checked-in wrapper and validate its integrity.
+- Added disabled and loading button states to the sample with UI-test coverage.
 
 ## 0.1.0 — Initial development scaffold
 
