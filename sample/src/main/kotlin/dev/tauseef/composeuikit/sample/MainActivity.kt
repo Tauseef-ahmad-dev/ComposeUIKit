@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import dev.tauseef.composeuikit.components.buttons.UIKitButton
 import dev.tauseef.composeuikit.components.buttons.UIKitButtonVariant
@@ -71,7 +72,9 @@ class MainActivity : ComponentActivity() {
                     snackbarHost = { UIKitSnackbarHost(hostState = snackbarHostState) }
                 ) { contentPadding ->
                     LazyColumn(
-                        modifier = Modifier.padding(contentPadding),
+                        modifier = Modifier
+                            .padding(contentPadding)
+                            .testTag("component-playground-list"),
                         contentPadding = PaddingValues(20.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
