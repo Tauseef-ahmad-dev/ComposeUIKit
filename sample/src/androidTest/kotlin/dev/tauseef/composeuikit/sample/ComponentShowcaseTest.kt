@@ -106,4 +106,22 @@ class ComponentShowcaseTest {
         composeRule.onNodeWithText("Reusable bottom sheet").assertIsDisplayed()
         composeRule.onNodeWithText("Close").performClick()
     }
+
+    @Test
+    fun iconButton_exposesAccessibleDescription() {
+        composeRule.onNodeWithContentDescription("Show information").assertIsDisplayed()
+    }
+
+    @Test
+    fun textField_displaysValidationError() {
+        composeRule.onNodeWithText("Error example").performScrollTo()
+        composeRule.onNodeWithText("Error example").performTextInput("invalid")
+        composeRule.onNodeWithText("This value is not accepted").assertIsDisplayed()
+    }
+
+    @Test
+    fun emptyState_recoveryActionShowsFeedback() {
+        composeRule.onNodeWithText("Refresh").performScrollTo().performClick()
+        composeRule.onNodeWithText("Refresh requested").assertIsDisplayed()
+    }
 }
