@@ -29,6 +29,11 @@ class ComponentShowcaseTest {
         composeRule.mainClock.autoAdvance = false
     }
 
+    private fun settleUi() {
+        composeRule.mainClock.advanceTimeBy(1_000)
+        composeRule.waitForIdle()
+    }
+
     @Test
     fun sample_displaysComponentPlayground() {
         composeRule.onNodeWithText("ComposeUIKit").assertIsDisplayed()
@@ -38,6 +43,7 @@ class ComponentShowcaseTest {
     @Test
     fun primaryButton_displaysSnackbarFeedback() {
         composeRule.onNodeWithText("Primary action").performClick()
+        settleUi()
         composeRule.onNodeWithText("Primary action clicked").assertIsDisplayed()
     }
 
@@ -45,24 +51,31 @@ class ComponentShowcaseTest {
     fun nameField_acceptsTextInput() {
         composeRule.onNodeWithText("Full name").performScrollTo()
         composeRule.onNodeWithText("Enter your name").performTextInput("Tauseef")
+        settleUi()
         composeRule.onNodeWithText("Tauseef").assertIsDisplayed()
     }
 
     @Test
     fun disabledButton_doesNotAcceptInteraction() {
-        composeRule.onNodeWithText("Disabled action").performScrollTo().assertIsNotEnabled()
+        composeRule.onNodeWithText("Disabled action").performScrollTo()
+        settleUi()
+        composeRule.onNodeWithText("Disabled action").assertIsNotEnabled()
     }
 
     @Test
     fun loadingButton_preventsRepeatedSubmission() {
-        composeRule.onNodeWithText("Saving changes").performScrollTo().assertIsNotEnabled()
+        composeRule.onNodeWithText("Saving changes").performScrollTo()
+        settleUi()
+        composeRule.onNodeWithText("Saving changes").assertIsNotEnabled()
     }
 
     @Test
     fun dropdown_selectsAndDisplaysChosenOption() {
         composeRule.onNodeWithText("Category").performScrollTo()
         composeRule.onNodeWithText("Select an option").performClick()
+        settleUi()
         composeRule.onNodeWithText("Development").performClick()
+        settleUi()
         composeRule.onNodeWithText("Development").assertIsDisplayed()
     }
 
@@ -71,17 +84,21 @@ class ComponentShowcaseTest {
         val checkbox = composeRule.onNodeWithText("Enable notifications").performScrollTo()
         checkbox.assertIsOn()
         checkbox.performClick()
+        settleUi()
         checkbox.assertIsOff()
     }
 
     @Test
     fun radioGroup_selectsPhoneOption() {
-        composeRule.onNodeWithText("Phone").performScrollTo().performClick().assertIsSelected()
+        composeRule.onNodeWithText("Phone").performScrollTo().performClick()
+        settleUi()
+        composeRule.onNodeWithText("Phone").assertIsSelected()
     }
 
     @Test
     fun passwordField_togglesVisibilityAction() {
         composeRule.onNodeWithText("Show").performScrollTo().performClick()
+        settleUi()
         composeRule.onNodeWithText("Hide").assertIsDisplayed()
     }
 
@@ -89,30 +106,38 @@ class ComponentShowcaseTest {
     fun searchField_clearActionResetsQuery() {
         composeRule.onNodeWithText("Search components").performScrollTo()
         composeRule.onNodeWithText("Search components").performTextInput("button")
+        settleUi()
         composeRule.onNodeWithContentDescription("Clear search").performClick()
+        settleUi()
         composeRule.onNodeWithText("Search components").assertIsDisplayed()
     }
 
     @Test
     fun confirmationDialog_confirmsAndShowsFeedback() {
         composeRule.onNodeWithText("Outlined action").performScrollTo().performClick()
+        settleUi()
         composeRule.onNodeWithText("Confirm action").assertIsDisplayed()
         composeRule.onNodeWithText("Confirm").performClick()
+        settleUi()
         composeRule.onNodeWithText("Confirmed").assertIsDisplayed()
     }
 
     @Test
     fun datePickerDialog_canBeOpenedAndDismissed() {
         composeRule.onNodeWithText("Choose date").performScrollTo().performClick()
+        settleUi()
         composeRule.onNodeWithText("Select date").assertIsDisplayed()
         composeRule.onNodeWithText("Cancel").performClick()
+        settleUi()
     }
 
     @Test
     fun bottomSheet_displaysCallerContentAndDismisses() {
         composeRule.onNodeWithText("Open bottom sheet").performScrollTo().performClick()
+        settleUi()
         composeRule.onNodeWithText("Reusable bottom sheet").assertIsDisplayed()
         composeRule.onNodeWithText("Close").performClick()
+        settleUi()
     }
 
     @Test
@@ -124,12 +149,14 @@ class ComponentShowcaseTest {
     fun textField_displaysValidationError() {
         composeRule.onNodeWithText("Error example").performScrollTo()
         composeRule.onNodeWithText("Error example").performTextInput("invalid")
+        settleUi()
         composeRule.onNodeWithText("This value is not accepted").assertIsDisplayed()
     }
 
     @Test
     fun emptyState_recoveryActionShowsFeedback() {
         composeRule.onNodeWithText("Refresh").performScrollTo().performClick()
+        settleUi()
         composeRule.onNodeWithText("Refresh requested").assertIsDisplayed()
     }
 }
