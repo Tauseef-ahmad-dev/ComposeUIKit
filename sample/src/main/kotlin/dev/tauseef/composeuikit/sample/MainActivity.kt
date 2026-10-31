@@ -24,7 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.tauseef.composeuikit.components.buttons.UIKitButton
 import dev.tauseef.composeuikit.components.buttons.UIKitButtonVariant
+import dev.tauseef.composeuikit.components.buttons.UIKitIconButton
 import dev.tauseef.composeuikit.components.dialogs.UIKitConfirmationDialog
+import dev.tauseef.composeuikit.components.sheets.UIKitBottomSheet
+import dev.tauseef.composeuikit.components.layout.UIKitDivider
 import dev.tauseef.composeuikit.components.feedback.UIKitEmptyState
 import dev.tauseef.composeuikit.components.feedback.UIKitLoader
 import dev.tauseef.composeuikit.components.feedback.UIKitSnackbarHost
@@ -60,6 +63,8 @@ class MainActivity : ComponentActivity() {
                 var showDatePicker by rememberSaveable { mutableStateOf(false) }
                 var selectedDateMillis by rememberSaveable { mutableStateOf<Long?>(null) }
                 var showConfirmation by rememberSaveable { mutableStateOf(false) }
+                var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+                var validationText by rememberSaveable { mutableStateOf("") }
 
                 Scaffold(
                     snackbarHost = { UIKitSnackbarHost(hostState = snackbarHostState) }
@@ -105,6 +110,10 @@ class MainActivity : ComponentActivity() {
                                     variant = UIKitButtonVariant.Outlined,
                                     modifier = Modifier.fillMaxWidth()
                                 )
+                                UIKitIconButton(
+                                    onClick = { coroutineScope.launch { snackbarHostState.showSnackbar("Information action clicked") } },
+                                    contentDescription = "Show information"
+                                ) { Text("ⓘ") }
                                 UIKitButton(
                                     text = "Text action",
                                     onClick = {
@@ -129,10 +138,10 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.fillMaxWidth()
                                 )
                                 UIKitTextField(
-                                    value = query,
-                                    onValueChange = { query = it },
+                                    value = validationText,
+                                    onValueChange = { validationText = it },
                                     label = "Error example",
-                                    errorMessage = if (query == "invalid") "This value is not accepted" else null,
+                                    errorMessage = if (validationText == "invalid") "This value is not accepted" else null,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                                 UIKitPasswordField(
@@ -198,6 +207,11 @@ class MainActivity : ComponentActivity() {
                         item {
                             DemoSection(title = "Feedback and layout") {
                                 UIKitLoader(message = "Loading preview")
+                                UIKitButton(
+                                    text = "Open bottom sheet",
+                                    onClick = { showBottomSheet = true },
+                                    variant = UIKitButtonVariant.Outlined
+                                )
                                 UIKitEmptyState(
                                     title = "Nothing here yet",
                                     description = "An empty state can guide people towards their next action.",
@@ -229,6 +243,27 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
+                if (showBottomSheet) {
+                    UIKitBottomSheet(
+                        onDismissRequest = { showBottomSheet = false }
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Text("Reusable bottom sheet", style = MaterialTheme.typography.titleLarge)
+                            Text("The sheet content is supplied by the consuming application.")
+                            UIKitButton(
+                                text = "Close",
+                                onClick = { showBottomSheet = false },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+
                 if (showConfirmation) {
                     UIKitConfirmationDialog(
                         title = "Confirm action",
@@ -258,6 +293,7 @@ private fun DemoSection(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             content = {
                 Text(title, style = MaterialTheme.typography.titleLarge)
+                UIKitDivider()
                 content(this)
             }
         )
