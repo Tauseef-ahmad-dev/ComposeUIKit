@@ -31,7 +31,6 @@ import dev.tauseef.composeuikit.components.dialogs.UIKitConfirmationDialog
 import dev.tauseef.composeuikit.components.sheets.UIKitBottomSheet
 import dev.tauseef.composeuikit.components.layout.UIKitDivider
 import dev.tauseef.composeuikit.components.feedback.UIKitEmptyState
-import dev.tauseef.composeuikit.components.feedback.UIKitLoader
 import dev.tauseef.composeuikit.components.feedback.UIKitSnackbarHost
 import dev.tauseef.composeuikit.components.inputs.UIKitPasswordField
 import dev.tauseef.composeuikit.components.inputs.UIKitSearchField
@@ -223,7 +222,6 @@ class MainActivity : ComponentActivity() {
 
                         item {
                             DemoSection(title = "Feedback and layout") {
-                                UIKitLoader(message = "Loading preview")
                                 UIKitButton(
                                     text = "Open bottom sheet",
                                     onClick = { showBottomSheet = true },
