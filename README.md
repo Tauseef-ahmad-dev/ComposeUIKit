@@ -33,7 +33,9 @@ The project is designed for real application teams: APIs are state-hoisted where
 - **Selection controls** — date picker, filter chips, checkbox, and radio group.
 - **Feedback and surfaces** — dialogs, modal bottom sheet, loader, snackbar host, empty state, cards, and divider.
 - **Interactive sample** — a small app that consumes the library module.
-- **Automated checks** — GitHub Actions builds the library, runs unit tests and lint, and builds the sample.
+- **Consumer-ready dependency scopes** — public Compose and Material 3 API types are exported correctly from the Android library.
+- **Local Maven publication** — generates an AAR, sources JAR, and POM for integration testing in another Android project.
+- **Automated checks** — GitHub Actions builds the library and sample, runs unit tests and lint, compiles sample UI tests, and verifies local Maven publication.
 
 ## Components
 
