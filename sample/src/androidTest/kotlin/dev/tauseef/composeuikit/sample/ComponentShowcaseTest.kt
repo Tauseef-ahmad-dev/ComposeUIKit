@@ -14,7 +14,6 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,15 +23,7 @@ class ComponentShowcaseTest {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    @Before
-    fun disableAutomaticAnimationClock() {
-        // The sample intentionally shows an infinite loading indicator. Keep Compose's
-        // test clock under test control so waitForIdle does not wait for it forever.
-        composeRule.mainClock.autoAdvance = false
-    }
-
     private fun settleUi() {
-        composeRule.mainClock.advanceTimeBy(1_000)
         composeRule.waitForIdle()
     }
 
