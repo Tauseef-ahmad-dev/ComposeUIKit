@@ -7,7 +7,7 @@ ComposeUIKit is currently an early-development library. Its public API is not st
 The release publication creates an AAR, sources JAR, and Maven POM:
 
 ```bash
-gradle :composeuikit:publishReleasePublicationToLocalRepository
+./gradlew :composeuikit:publishReleasePublicationToLocalRepository
 ```
 
 The repository is written to:
@@ -32,6 +32,19 @@ dependencies {
 ```
 
 The coordinates are development coordinates. Do not advertise them as a public hosted artifact.
+
+## Tagged GitHub prerelease
+
+The repository contains a release workflow that creates a GitHub prerelease with the AAR, sources JAR, and POM. It verifies that the pushed tag matches the Gradle project version and reruns the API check, unit tests, lint, sample compilation, and local publication before creating the prerelease.
+
+After reviewing the changelog and confirming the version in the root `build.gradle.kts`, create and push an annotated tag:
+
+```bash
+git tag -a v0.1.0 -m "ComposeUIKit 0.1.0"
+git push origin v0.1.0
+```
+
+The workflow marks GitHub releases as prereleases while the public API remains in early development. Maven Central publication is intentionally separate and still requires namespace verification and signing credentials.
 
 ## Before Maven Central
 

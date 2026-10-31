@@ -2,7 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "chore/**"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -33,84 +33,117 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
 
-      - name: Build library
-        run: ./gradlew :composeuikit:assembleRelease
+      - name: Build, test and lint library and sample
+        run: |
+          ./gradlew :composeuikit:assembleRelease
+          ./gradlew :composeuikit:test
+          ./gradlew :composeuikit:lint
+          ./gradlew :sample:assembleDebug
+          ./gradlew :sample:assembleDebugAndroidTest
+          ./gradlew :composeuikit:publishReleasePublicationToLocalRepository
 
-      - name: Run unit tests
-        run: ./gradlew :composeuikit:test
+      - name: Generate public API snapshot
+        run: ./gradlew apiDump
 
-      - name: Run Android lint
-        run: ./gradlew :composeuikit:lint
+      - name: Locate generated API snapshot
+        run: |
+          echo "Generated Kotlin API dump files:"
+          find . -type f -name '*.api' -not -path './.gradle/*' -print
+          test -n "$(find . -type f -name '*.api' -not -path './.gradle/*' -print -quit)"
 
-      - name: Build sample app
-        run: ./gradlew :sample:assembleDebug
-
-      - name: Upload sample APK for screenshot capture
+      - name: Upload API snapshot for review
         uses: actions/upload-artifact@v7
         with:
-          name: composeuikit-sample-debug-apk
-          path: sample/build/outputs/apk/debug/sample-debug.apk
+          name: composeuikit-api-snapshot
+          path: |
+            **/*.api
           if-no-files-found: error
-          retention-days: 1
+          retention-days: 7
 
-      - name: Compile sample UI tests
-        run: ./gradlew :sample:assembleDebugAndroidTest
-
-      - name: Verify Maven publication
-        run: ./gradlew :composeuikit:publishReleasePublicationToLocalRepository
-
-  capture-screenshots:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[capture-screenshots]'))
+  android-emulator-validation:
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      CAPTURE_SCREENSHOTS: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[capture-screenshots]'))) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ github.sha }}
 
-      - name: Download sample APK
-        uses: actions/download-artifact@v7
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
         with:
-          name: composeuikit-sample-debug-apk
-          path: artifacts
+          distribution: temurin
+          java-version: "17"
 
-      - name: Capture sample app screenshots
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Run sample UI tests and capture README screenshots
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           target: google_apis
           arch: x86_64
-          profile: pixel_7_pro
+          profile: pixel_2
           disable-animations: true
-          emulator-boot-timeout: 600
+          emulator-boot-timeout: 900
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           script: |
-            adb install -r artifacts/sample-debug.apk
-            adb shell wm size 1080x2400
-            adb shell wm density 420
-            adb shell am start -n dev.tauseef.composeuikit.sample/.MainActivity
-            sleep 5
-            mkdir -p docs/assets/screenshots
-            adb exec-out screencap -p > docs/assets/screenshots/component-overview.png
-            adb shell input swipe 540 2050 540 600 450
-            sleep 2
-            adb exec-out screencap -p > docs/assets/screenshots/forms-and-selection.png
+            set -eu
+            ./gradlew :sample:connectedDebugAndroidTest :sample:assembleDebug
 
-      - name: Mark screenshot roadmap item complete
-        run: |
-          sed -i 's/- \[ \] Capture real emulator screenshots for README/- [x] Capture real emulator screenshots for README/' README.md
+            if [ "$CAPTURE_SCREENSHOTS" = "true" ]; then
+              adb shell wm size 1080x2400
+              adb shell wm density 420
+              adb shell settings put system font_scale 1.0
+              adb shell input keyevent 82
+              adb shell am force-stop dev.tauseef.composeuikit.sample
+              adb logcat -c
+              adb shell am start -W -n dev.tauseef.composeuikit.sample/.MainActivity
+              sleep 3
+              adb shell uiautomator dump /sdcard/composeuikit-screen-1.xml
+              adb exec-out cat /sdcard/composeuikit-screen-1.xml > /tmp/composeuikit-screen-1.xml
+              if ! grep -q "ComposeUIKit" /tmp/composeuikit-screen-1.xml || ! grep -q "Primary action" /tmp/composeuikit-screen-1.xml; then
+                echo "Sample app content was not visible on the emulator."
+                adb logcat -d -t 3000 | grep -E "FATAL EXCEPTION|AndroidRuntime|dev.tauseef.composeuikit.sample|Exception" | tail -100 || true
+                exit 1
+              fi
+
+              mkdir -p docs/assets/screenshots
+              adb exec-out screencap -p > docs/assets/screenshots/component-overview.png
+
+              adb shell input swipe 540 2050 540 600 450
+              sleep 2
+              adb shell uiautomator dump /sdcard/composeuikit-screen-2.xml
+              adb exec-out cat /sdcard/composeuikit-screen-2.xml > /tmp/composeuikit-screen-2.xml
+              if ! grep -q "Category" /tmp/composeuikit-screen-2.xml; then
+                echo "Selection controls were not visible after scrolling the sample app."
+                exit 1
+              fi
+              adb exec-out screencap -p > docs/assets/screenshots/forms-and-selection.png
+
+              test -s docs/assets/screenshots/component-overview.png
+              test -s docs/assets/screenshots/forms-and-selection.png
+              if cmp -s docs/assets/screenshots/component-overview.png docs/assets/screenshots/forms-and-selection.png; then
+                echo "Screenshot captures are identical; refusing to publish duplicates."
+                exit 1
+              fi
+            fi
 
       - name: Commit emulator screenshots
+        if: env.CAPTURE_SCREENSHOTS == 'true'
         run: |
+          sed -i 's/- \[ \] Capture real emulator screenshots for README/- [x] Capture real emulator screenshots for README/' README.md
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/assets/screenshots README.md
           if git diff --cached --quiet; then
             echo "No screenshot changes to commit."
           else
-            git commit -m "docs: add Android emulator screenshots"
-            git push
+            git commit -m "docs: add Android emulator screenshots [skip ci]"
+            git push origin HEAD:main
           fi
