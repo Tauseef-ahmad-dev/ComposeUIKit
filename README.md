@@ -208,7 +208,7 @@ GitHub Actions currently runs:
 - Local Maven publication verification
 - Sample instrumentation tests on an Android emulator
 
-The emulator job also refreshes the README screenshots when manually dispatched on `main` or when a commit message contains `[capture-screenshots]`.
+The Android emulator job runs UI tests with read-only repository permissions and uploads screenshot captures as a workflow artifact. A separate, main-only job commits refreshed README screenshots when the workflow is manually dispatched on `main` or when a commit message contains `[capture-screenshots]`.
 
 Sample instrumentation tests are included in the repository and can be run on a connected emulator/device with:
 
