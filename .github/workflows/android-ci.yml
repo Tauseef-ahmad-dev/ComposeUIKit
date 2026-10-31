@@ -45,11 +45,18 @@ jobs:
       - name: Generate public API snapshot
         run: ./gradlew apiDump
 
+      - name: Locate generated API snapshot
+        run: |
+          echo "Generated Kotlin API dump files:"
+          find . -type f -name '*.api' -not -path './.gradle/*' -print
+          test -n "$(find . -type f -name '*.api' -not -path './.gradle/*' -print -quit)"
+
       - name: Upload API snapshot for review
         uses: actions/upload-artifact@v7
         with:
           name: composeuikit-api-snapshot
-          path: api/**/*.api
+          path: |
+            **/*.api
           if-no-files-found: error
           retention-days: 7
 
