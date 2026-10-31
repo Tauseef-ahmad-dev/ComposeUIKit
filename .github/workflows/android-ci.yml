@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: composeuikit-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -38,3 +42,6 @@ jobs:
 
       - name: Build sample app
         run: gradle :sample:assembleDebug
+
+      - name: Compile sample UI tests
+        run: gradle :sample:assembleDebugAndroidTest
