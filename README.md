@@ -110,6 +110,7 @@ Run the following commands from the repository root:
 ./gradlew :composeuikit:lint
 ./gradlew :sample:assembleDebug
 ./gradlew :sample:assembleDebugAndroidTest
+./gradlew :sample:connectedDebugAndroidTest
 ```
 
 On Windows, use `gradlew.bat` instead of `./gradlew`. Android Studio also detects the checked-in wrapper automatically.
@@ -172,7 +173,7 @@ UIKitButton(
 The library has a release publication configured with a sources JAR and POM metadata. To produce a local Maven repository for integration testing:
 
 ```bash
-gradle :composeuikit:publishReleasePublicationToLocalRepository
+./gradlew :composeuikit:publishReleasePublicationToLocalRepository
 ```
 
 Artifacts are written under `composeuikit/build/repo`. Add that folder as a Maven repository in a separate test app to verify a consumer-style dependency. **ComposeUIKit is not yet published to Maven Central**; signing, namespace verification, credentials, and a stable API review are still required before a public release.
@@ -201,13 +202,13 @@ Artifacts are written under `composeuikit/build/repo`. Add that folder as a Mave
 GitHub Actions currently runs:
 
 - Gradle Wrapper integrity validation
-- Library release compilation and JVM unit tests
-- Android lint
-- Sample debug compilation
-- Sample UI-test compilation
+- Public Kotlin API compatibility checks against the committed API baseline
+- Library release compilation, JVM unit tests and Android lint
+- Sample debug compilation and UI-test compilation
 - Local Maven publication verification
+- Sample instrumentation tests on an Android emulator
 
-A dedicated emulator-capture job can be run manually or by using the `[capture-screenshots]` commit marker. It launches the sample app on an Android emulator and refreshes the README screenshots.
+The emulator job also refreshes the README screenshots when manually dispatched on `main` or when a commit message contains `[capture-screenshots]`.
 
 Sample instrumentation tests are included in the repository and can be run on a connected emulator/device with:
 
@@ -224,9 +225,9 @@ Sample instrumentation tests are included in the repository and can be run on a 
 - [x] Dialog, bottom sheet, feedback, and layout primitives
 - [x] Interactive sample playground
 - [x] Architecture, theming, component, and accessibility docs
-- [ ] Expand component previews and interaction tests
+- [x] Expand component previews and interaction tests
 - [ ] Capture real emulator screenshots for README
-- [ ] API compatibility checks and release workflow
+- [x] API compatibility checks and tagged GitHub prerelease workflow
 - [ ] Publish a stable artifact to Maven Central
 
 ## License

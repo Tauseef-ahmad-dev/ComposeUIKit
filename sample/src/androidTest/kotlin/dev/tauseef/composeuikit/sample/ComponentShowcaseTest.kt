@@ -2,6 +2,10 @@ package dev.tauseef.composeuikit.sample
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -44,5 +48,62 @@ class ComponentShowcaseTest {
     @Test
     fun loadingButton_preventsRepeatedSubmission() {
         composeRule.onNodeWithText("Saving changes").performScrollTo().assertIsNotEnabled()
+    }
+
+    @Test
+    fun dropdown_selectsAndDisplaysChosenOption() {
+        composeRule.onNodeWithText("Category").performScrollTo()
+        composeRule.onNodeWithText("Select an option").performClick()
+        composeRule.onNodeWithText("Engineering").performClick()
+        composeRule.onNodeWithText("Engineering").assertIsDisplayed()
+    }
+
+    @Test
+    fun checkbox_updatesItsCheckedState() {
+        val checkbox = composeRule.onNodeWithText("Enable notifications").performScrollTo()
+        checkbox.assertIsOn()
+        checkbox.performClick()
+        checkbox.assertIsOff()
+    }
+
+    @Test
+    fun radioGroup_selectsPhoneOption() {
+        composeRule.onNodeWithText("Phone").performScrollTo().performClick().assertIsSelected()
+    }
+
+    @Test
+    fun passwordField_togglesVisibilityAction() {
+        composeRule.onNodeWithText("Show").performScrollTo().performClick()
+        composeRule.onNodeWithText("Hide").assertIsDisplayed()
+    }
+
+    @Test
+    fun searchField_clearActionResetsQuery() {
+        composeRule.onNodeWithText("Search components").performScrollTo()
+        composeRule.onNodeWithText("Search components").performTextInput("button")
+        composeRule.onNodeWithContentDescription("Clear search").performClick()
+        composeRule.onNodeWithText("Search components").assertIsDisplayed()
+    }
+
+    @Test
+    fun confirmationDialog_confirmsAndShowsFeedback() {
+        composeRule.onNodeWithText("Outlined action").performScrollTo().performClick()
+        composeRule.onNodeWithText("Confirm action").assertIsDisplayed()
+        composeRule.onNodeWithText("Confirm").performClick()
+        composeRule.onNodeWithText("Confirmed").assertIsDisplayed()
+    }
+
+    @Test
+    fun datePickerDialog_canBeOpenedAndDismissed() {
+        composeRule.onNodeWithText("Choose date").performScrollTo().performClick()
+        composeRule.onNodeWithText("Select date").assertIsDisplayed()
+        composeRule.onNodeWithText("Cancel").performClick()
+    }
+
+    @Test
+    fun bottomSheet_displaysCallerContentAndDismisses() {
+        composeRule.onNodeWithText("Open bottom sheet").performScrollTo().performClick()
+        composeRule.onNodeWithText("Reusable bottom sheet").assertIsDisplayed()
+        composeRule.onNodeWithText("Close").performClick()
     }
 }

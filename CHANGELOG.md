@@ -17,6 +17,9 @@ All notable project changes are documented here.
 - Added the official Gradle 8.13 Wrapper with distribution checksum verification.
 - Updated CI to build through the checked-in wrapper and validate its integrity.
 - Added disabled and loading button states to the sample with UI-test coverage.
+- Expanded sample instrumentation coverage for dropdowns, selection, dialogs, password visibility, search clearing, and bottom sheets.
+- Added Kotlin binary API snapshots and a tagged GitHub prerelease workflow.
+- Updated CI to run sample instrumentation tests on an Android emulator.
 
 ## 0.1.0 — Initial development scaffold
 

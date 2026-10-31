@@ -10,7 +10,9 @@ Thanks for your interest in ComposeUIKit.
 - Add previews for meaningful component states.
 - Add or update tests for behaviour changes.
 - Document public APIs with KDoc.
-- Run the library tests, lint and sample build before opening a pull request.
+- Run the library tests, API compatibility check, lint and sample build before opening a pull request.
+- Run the sample instrumentation suite on an emulator with `./gradlew :sample:connectedDebugAndroidTest`.
+- Update the committed API dump only when a public API change is intentional; review the diff before committing it.
 
 ## Pull requests
 
