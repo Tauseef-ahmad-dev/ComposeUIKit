@@ -57,7 +57,7 @@ jobs:
     # not again on every PR. PRs still compile the instrumentation APK in the build job.
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     permissions:
       contents: read
     env:
@@ -78,7 +78,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
 
       - name: Run sample UI tests and capture README screenshots
-        timeout-minutes: 15
+        timeout-minutes: 25
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
@@ -86,7 +86,7 @@ jobs:
           arch: x86_64
           profile: pixel_2
           disable-animations: true
-          emulator-boot-timeout: 300
+          emulator-boot-timeout: 900
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           script: |
             set -eu
