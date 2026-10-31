@@ -7,6 +7,8 @@ object UIKitColors {
     val Primary = Color(0xFF315FEA)
     val PrimaryDark = Color(0xFF9CB2FF)
     val OnPrimary = Color(0xFFFFFFFF)
+    /** Foreground color with accessible contrast on [PrimaryDark]. */
+    val OnPrimaryDark = Color(0xFF142451)
     val Secondary = Color(0xFF52627D)
     val SecondaryDark = Color(0xFFB8C6E0)
     val LightBackground = Color(0xFFF8F9FC)
