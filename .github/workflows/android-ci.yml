@@ -64,7 +64,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     env:
       CAPTURE_SCREENSHOTS: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[capture-screenshots]'))) }}
     steps:
@@ -134,8 +134,34 @@ jobs:
               fi
             fi
 
-      - name: Commit emulator screenshots
+      - name: Upload emulator screenshots
         if: env.CAPTURE_SCREENSHOTS == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: composeuikit-readme-screenshots
+          path: docs/assets/screenshots/*.png
+          if-no-files-found: error
+          retention-days: 1
+
+  commit-emulator-screenshots:
+    needs: android-emulator-validation
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[capture-screenshots]')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Download emulator screenshots
+        uses: actions/download-artifact@v8
+        with:
+          name: composeuikit-readme-screenshots
+          path: docs/assets/screenshots
+
+      - name: Commit emulator screenshots
         run: |
           sed -i 's/- \[ \] Capture real emulator screenshots for README/- [x] Capture real emulator screenshots for README/' README.md
           git config user.name "github-actions[bot]"
