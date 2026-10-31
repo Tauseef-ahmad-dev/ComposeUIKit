@@ -150,6 +150,7 @@ class MainActivity : ComponentActivity() {
                                     onValueChange = { name = it },
                                     label = "Full name",
                                     placeholder = "Enter your name",
+                                    modifier = Modifier.fillMaxWidth().testTag("sample-name-field"),
                                     helperText = "This is a state-hoisted input.",
                                     modifier = Modifier.fillMaxWidth()
                                 )
@@ -182,7 +183,7 @@ class MainActivity : ComponentActivity() {
                                     onOptionSelected = { category = it },
                                     optionLabel = { it },
                                     label = "Category",
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier.fillMaxWidth().testTag("sample-category-dropdown")
                                 )
                                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Text("Filters", style = MaterialTheme.typography.titleSmall)
