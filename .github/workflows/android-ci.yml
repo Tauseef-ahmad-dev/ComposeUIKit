@@ -2,7 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "chore/**"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -81,28 +81,50 @@ jobs:
           api-level: 35
           target: google_apis
           arch: x86_64
-          profile: pixel_7_pro
+          profile: pixel_2
           disable-animations: true
-          emulator-boot-timeout: 600
+          emulator-boot-timeout: 900
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           script: |
+            set -eu
             ./gradlew :sample:connectedDebugAndroidTest :sample:assembleDebug
+
             if [ "$CAPTURE_SCREENSHOTS" = "true" ]; then
               adb shell wm size 1080x2400
               adb shell wm density 420
               adb shell settings put system font_scale 1.0
-              adb shell wm dismiss-keyguard
-              adb install -r sample/build/outputs/apk/debug/sample-debug.apk
+              adb shell input keyevent 82
               adb shell am force-stop dev.tauseef.composeuikit.sample
+              adb logcat -c
               adb shell am start -W -n dev.tauseef.composeuikit.sample/.MainActivity
-              sleep 2
+              sleep 3
+              adb shell uiautomator dump /sdcard/composeuikit-screen-1.xml
+              adb exec-out cat /sdcard/composeuikit-screen-1.xml > /tmp/composeuikit-screen-1.xml
+              if ! grep -q "ComposeUIKit" /tmp/composeuikit-screen-1.xml || ! grep -q "Primary action" /tmp/composeuikit-screen-1.xml; then
+                echo "Sample app content was not visible on the emulator."
+                adb logcat -d -t 3000 | grep -E "FATAL EXCEPTION|AndroidRuntime|dev.tauseef.composeuikit.sample|Exception" | tail -100 || true
+                exit 1
+              fi
+
               mkdir -p docs/assets/screenshots
               adb exec-out screencap -p > docs/assets/screenshots/component-overview.png
+
               adb shell input swipe 540 2050 540 600 450
               sleep 2
+              adb shell uiautomator dump /sdcard/composeuikit-screen-2.xml
+              adb exec-out cat /sdcard/composeuikit-screen-2.xml > /tmp/composeuikit-screen-2.xml
+              if ! grep -q "Category" /tmp/composeuikit-screen-2.xml; then
+                echo "Selection controls were not visible after scrolling the sample app."
+                exit 1
+              fi
               adb exec-out screencap -p > docs/assets/screenshots/forms-and-selection.png
+
               test -s docs/assets/screenshots/component-overview.png
               test -s docs/assets/screenshots/forms-and-selection.png
+              if cmp -s docs/assets/screenshots/component-overview.png docs/assets/screenshots/forms-and-selection.png; then
+                echo "Screenshot captures are identical; refusing to publish duplicates."
+                exit 1
+              fi
             fi
 
       - name: Commit emulator screenshots
