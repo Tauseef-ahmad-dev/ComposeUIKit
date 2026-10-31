@@ -20,6 +20,10 @@ All notable project changes are documented here.
 - Expanded sample instrumentation coverage for dropdowns, selection, dialogs, password visibility, search clearing, and bottom sheets.
 - Added Kotlin binary API snapshots and a tagged GitHub prerelease workflow.
 - Updated CI to run sample instrumentation tests on an Android emulator.
+- Committed the Kotlin binary API baseline and enforced compatibility checks in CI.
+- Improved dark-theme primary button text contrast and added a WCAG AA contrast regression test.
+- Expanded emulator tests for accessibility descriptions, validation errors, and empty-state recovery actions.
+- Isolated screenshot publishing into a main-only job with write permissions; emulator validation remains read-only.
 
 ## 0.1.0 — Initial development scaffold
 
