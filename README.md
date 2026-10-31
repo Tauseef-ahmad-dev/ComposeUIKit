@@ -225,7 +225,7 @@ Sample instrumentation tests are included in the repository and can be run on a 
 - [x] Interactive sample playground
 - [x] Architecture, theming, component, and accessibility docs
 - [ ] Expand component previews and interaction tests
-- [ ] Capture real emulator screenshots for README
+- [x] Capture real emulator screenshots for README
 - [ ] API compatibility checks and release workflow
 - [ ] Publish a stable artifact to Maven Central
 
