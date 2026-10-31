@@ -54,8 +54,8 @@ class ComponentShowcaseTest {
     fun dropdown_selectsAndDisplaysChosenOption() {
         composeRule.onNodeWithText("Category").performScrollTo()
         composeRule.onNodeWithText("Select an option").performClick()
-        composeRule.onNodeWithText("Engineering").performClick()
-        composeRule.onNodeWithText("Engineering").assertIsDisplayed()
+        composeRule.onNodeWithText("Development").performClick()
+        composeRule.onNodeWithText("Development").assertIsDisplayed()
     }
 
     @Test
