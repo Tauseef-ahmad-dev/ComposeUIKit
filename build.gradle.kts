@@ -11,6 +11,6 @@ apiValidation {
 }
 
 allprojects {
-    group = "dev.tauseef"
+    group = "io.github.tauseef-ahmad-dev"
     version = "0.1.0"
 }

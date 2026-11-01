@@ -16,7 +16,7 @@ ComposeUIKit is a small, reusable UI toolkit built on top of Jetpack Compose and
 
 The project is designed for real application teams: APIs are state-hoisted where practical, components expose modifiers and callbacks, and business rules stay in the consuming app.
 
-> **Development status:** APIs are still evolving. The current `0.1.0` scaffold is not yet a stable Maven release. Use it as a source dependency while the public API is refined.
+> **Development status:** APIs are still evolving. The current `0.1.0` release is being prepared for Maven Central. See [Publishing](docs/publishing.md) for the verified coordinates and release process.
 
 ## Component showcase
 
@@ -175,13 +175,13 @@ UIKitButton(
 
 ### Publish to a local Maven repository
 
-The library has a release publication configured with a sources JAR and POM metadata. To produce a local Maven repository for integration testing:
+The library has a release publication configured with sources and POM metadata. To produce a local Maven repository for integration testing:
 
 ```bash
-./gradlew :composeuikit:publishReleasePublicationToLocalRepository
+./gradlew :composeuikit:publishMavenPublicationToLocalRepository
 ```
 
-Artifacts are written under `composeuikit/build/repo`. Add that folder as a Maven repository in a separate test app to verify a consumer-style dependency. **ComposeUIKit is not yet published to Maven Central**; signing, namespace verification, credentials, and a stable API review are still required before a public release.
+Artifacts are written under `composeuikit/build/repo`. Add that folder as a Maven repository in a separate test app to verify a consumer-style dependency. The intended Central coordinate is `io.github.tauseef-ahmad-dev:composeuikit:0.1.0`. The artifact becomes installable only after the signed deployment has passed Portal validation and has been published. See [Publishing](docs/publishing.md).
 
 ## Design principles
 
@@ -211,7 +211,7 @@ GitHub Actions runs the same lightweight validation for pull requests and pushes
 - JVM unit tests.
 - Android lint.
 - Sample app debug compilation.
-- Local Maven publication verification.
+- Local Maven publication verification and signed Maven Central release workflow.
 - Public API compatibility checks.
 
 Emulator-based instrumentation tests and automatic screenshot capture are intentionally excluded from CI to keep the pipeline fast and deterministic. Instrumentation tests remain in the repository and can be run manually on a connected emulator or device.
@@ -224,7 +224,7 @@ Sample instrumentation tests are included in the repository and can be run on a 
 
 ## GitHub prereleases
 
-Versioned GitHub prereleases are built from matching tags. The release workflow verifies that the tag matches the Gradle project version, runs API/build/test/lint checks, and attaches the locally published AAR, sources JAR, POM, and Gradle module metadata to the prerelease.
+Versioned GitHub prereleases are built from matching tags. The separate Maven Central workflow uploads signed artifacts to the Central Portal only after release checks pass; the deployment still requires review and publication in the Portal.
 
 For maintainers, create a version tag after the main-branch validation is green:
 
@@ -233,7 +233,7 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
-This produces a GitHub prerelease; it does not publish to Maven Central. Maven Central publication remains a separate milestone requiring namespace verification, signing, and publishing credentials.
+This produces a GitHub prerelease. To publish the matching artifact to Maven Central, configure the secrets and follow [docs/publishing.md](docs/publishing.md).
 
 ## Roadmap
 
@@ -247,7 +247,7 @@ This produces a GitHub prerelease; it does not publish to Maven Central. Maven C
 - [x] Expand component previews and interaction tests
 - [x] Capture and add sample screenshots to README
 - [x] API compatibility checks and tagged GitHub prerelease workflow
-- [ ] Publish a stable artifact to Maven Central
+- [x] Verify Maven Central namespace and configure signed publishing
 
 ## License
 
