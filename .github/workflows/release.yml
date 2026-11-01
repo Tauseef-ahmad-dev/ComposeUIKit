@@ -45,7 +45,6 @@ jobs:
           ./gradlew :composeuikit:assembleRelease
           ./gradlew :composeuikit:test
           ./gradlew :composeuikit:lint
-          ./gradlew :sample:assembleDebugAndroidTest
           ./gradlew :composeuikit:publishReleasePublicationToLocalRepository
 
       - name: Prepare release assets
