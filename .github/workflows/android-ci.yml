@@ -40,7 +40,7 @@ jobs:
             :composeuikit:test \
             :composeuikit:lint \
             :sample:assembleDebug \
-            :composeuikit:publishReleasePublicationToLocalRepository \
+            :composeuikit:publishToMavenLocal \
             apiCheck
 
       - name: Upload committed API baseline for review
