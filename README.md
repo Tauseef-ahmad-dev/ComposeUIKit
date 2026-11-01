@@ -16,7 +16,7 @@ ComposeUIKit is a small, reusable UI toolkit built on top of Jetpack Compose and
 
 The project is designed for real application teams: APIs are state-hoisted where practical, components expose modifiers and callbacks, and business rules stay in the consuming app.
 
-> **Development status:** APIs are still evolving. The current `0.1.0` release is being prepared for Maven Central. See [Publishing](docs/publishing.md) for the verified coordinates and release process.
+> **Development status:** APIs are still evolving. The current `0.1.1` release is being prepared for Maven Central. See [Publishing](docs/publishing.md) for the verified coordinates and release process.
 
 ## Component showcase
 
@@ -181,7 +181,7 @@ The library has a release publication configured with sources and POM metadata. 
 ./gradlew :composeuikit:publishToMavenLocal
 ```
 
-Artifacts are written to your local Maven cache under `~/.m2/repository`. Use that local Maven cache to verify a consumer-style dependency. The intended Central coordinate is `io.github.tauseef-ahmad-dev:composeuikit:0.1.0`. The artifact becomes installable only after the signed deployment has passed Portal validation and has been published. See [Publishing](docs/publishing.md).
+Artifacts are written to your local Maven cache under `~/.m2/repository`. Use that local Maven cache to verify a consumer-style dependency. The intended Central coordinate is `io.github.tauseef-ahmad-dev:composeuikit:0.1.1`. The artifact becomes installable only after the signed deployment has passed Portal validation and has been published. See [Publishing](docs/publishing.md).
 
 ## Design principles
 
@@ -229,8 +229,8 @@ Versioned GitHub prereleases are built from matching tags. The separate Maven Ce
 For maintainers, create a version tag after the main-branch validation is green:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
 This produces a GitHub prerelease. To publish the matching artifact to Maven Central, configure the secrets and follow [docs/publishing.md](docs/publishing.md).

@@ -16,7 +16,7 @@ Build the release publication locally:
 ./gradlew :composeuikit:publishToMavenLocal
 ```
 
-The artifacts are written to your local Maven cache under `~/.m2/repository/io/github/tauseef-ahmad-dev/composeuikit/0.1.0/`.
+The artifacts are written to your local Maven cache under `~/.m2/repository/io/github/tauseef-ahmad-dev/composeuikit/0.1.1/`.
 
 A separate Android project can add the generated folder as a Maven repository:
 
@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.github.tauseef-ahmad-dev:composeuikit:0.1.0")
+    implementation("io.github.tauseef-ahmad-dev:composeuikit:0.1.1")
 }
 ```
 
@@ -58,7 +58,7 @@ The output is sensitive. Store it directly in the GitHub Actions secret and neve
 
 ## Publishing workflow
 
-The `Publish to Maven Central` workflow runs on a version tag or can be started manually from **Actions** with an existing tag, such as `v0.1.0`.
+The `Publish to Maven Central` workflow runs on a version tag or can be started manually from **Actions** with an existing tag, such as `v0.1.1`.
 
 It verifies that the tag matches the Gradle version, runs API compatibility checks, builds and tests the library, runs lint and compiles the sample app, then uploads a signed deployment to the Central Portal.
 
@@ -87,7 +87,7 @@ After the deployment is published and indexed, consumers can add:
 
 ```kotlin
 dependencies {
-    implementation("io.github.tauseef-ahmad-dev:composeuikit:0.1.0")
+    implementation("io.github.tauseef-ahmad-dev:composeuikit:0.1.1")
 }
 ```
 
