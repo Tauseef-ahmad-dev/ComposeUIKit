@@ -23,9 +23,6 @@ class ComponentShowcaseTest {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-        composeRule.waitForIdle()
-    }
-
     /**
      * Scroll the LazyColumn itself to an item before querying its descendants.
      * LazyColumn only composes visible items, so calling performScrollTo() on an
