@@ -212,6 +212,19 @@ Sample instrumentation tests are included in the repository and can be run on a 
 ./gradlew :sample:connectedDebugAndroidTest
 ```
 
+## GitHub prereleases
+
+Versioned GitHub prereleases are built from matching tags. The release workflow verifies that the tag matches the Gradle project version, runs API/build/test/lint checks, and attaches the locally published AAR, sources JAR, and Maven metadata to the prerelease.
+
+For maintainers, create a version tag after the main-branch validation is green:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+This produces a GitHub prerelease; it does not publish to Maven Central. Maven Central publication remains a separate milestone requiring namespace verification, signing, and publishing credentials.
+
 ## Roadmap
 
 - [x] Initial Android library and sample modules
