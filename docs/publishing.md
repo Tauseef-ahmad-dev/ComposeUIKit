@@ -13,15 +13,10 @@ The Android namespace remains `dev.tauseef.composeuikit`; it is independent of t
 Build the release publication locally:
 
 ```bash
-./gradlew :composeuikit:publishMavenPublicationToLocalRepository
+./gradlew :composeuikit:publishToMavenLocal
 ```
 
-The repository is written to:
-
-```text
-composeuikit/build/repo/
-└── io/github/tauseef-ahmad-dev/composeuikit/0.1.0/
-```
+The artifacts are written to your local Maven cache under `~/.m2/repository/io/github/tauseef-ahmad-dev/composeuikit/0.1.0/`.
 
 A separate Android project can add the generated folder as a Maven repository:
 

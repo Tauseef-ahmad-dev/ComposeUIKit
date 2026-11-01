@@ -178,10 +178,10 @@ UIKitButton(
 The library has a release publication configured with sources and POM metadata. To produce a local Maven repository for integration testing:
 
 ```bash
-./gradlew :composeuikit:publishMavenPublicationToLocalRepository
+./gradlew :composeuikit:publishToMavenLocal
 ```
 
-Artifacts are written under `composeuikit/build/repo`. Add that folder as a Maven repository in a separate test app to verify a consumer-style dependency. The intended Central coordinate is `io.github.tauseef-ahmad-dev:composeuikit:0.1.0`. The artifact becomes installable only after the signed deployment has passed Portal validation and has been published. See [Publishing](docs/publishing.md).
+Artifacts are written to your local Maven cache under `~/.m2/repository`. Use that local Maven cache to verify a consumer-style dependency. The intended Central coordinate is `io.github.tauseef-ahmad-dev:composeuikit:0.1.0`. The artifact becomes installable only after the signed deployment has passed Portal validation and has been published. See [Publishing](docs/publishing.md).
 
 ## Design principles
 

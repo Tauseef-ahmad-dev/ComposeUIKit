@@ -46,14 +46,14 @@ jobs:
           ./gradlew :composeuikit:test
           ./gradlew :composeuikit:lint
           ./gradlew :sample:assembleDebug
-          ./gradlew :composeuikit:publishMavenPublicationToLocalRepository
+          ./gradlew :composeuikit:publishToMavenLocal
 
       - name: Prepare release assets
         shell: bash
         run: |
           set -euo pipefail
           VERSION="${GITHUB_REF_NAME#v}"
-          SOURCE="composeuikit/build/repo/io/github/tauseef-ahmad-dev/composeuikit/$VERSION"
+          SOURCE="$HOME/.m2/repository/io/github/tauseef-ahmad-dev/composeuikit/$VERSION"
           REQUIRED_ASSETS=(
             "composeuikit-$VERSION.aar"
             "composeuikit-$VERSION-sources.jar"
