@@ -9,7 +9,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performClick
@@ -23,6 +22,10 @@ import org.junit.runner.RunWith
 class ComponentShowcaseTest {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
+
+    private fun settleUi() {
+        composeRule.waitForIdle()
+    }
 
     /**
      * Scroll the LazyColumn itself to an item before querying its descendants.
@@ -71,7 +74,7 @@ class ComponentShowcaseTest {
 
     @Test
     fun dropdown_selectsAndDisplaysChosenOption() {
-        scrollTo("Category")
+        scrollTo("Select an option")
         composeRule.onNodeWithTag("sample-category-dropdown").performClick()
         settleUi()
         composeRule.onNodeWithText("Development").performClick()
