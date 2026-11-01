@@ -20,9 +20,17 @@ The project is designed for real application teams: APIs are state-hoisted where
 
 ## Component showcase
 
-README screenshots are maintained as reviewed documentation assets. Capture them manually from the sample app and add the PNGs under `docs/assets/screenshots/` when the component showcase is ready.
+The screenshots below are captured from the running ComposeUIKit sample app and show the library's interactive Material 3 components.
 
-<!-- screenshots:pending -->
+<p align="center">
+  <img src="docs/assets/screenshots/component-playground-buttons-inputs.png" alt="ComposeUIKit buttons and text input components" width="32%"/>
+  <img src="docs/assets/screenshots/component-playground-selection.png" alt="ComposeUIKit selection controls including dropdown, chips, checkbox, radio buttons and date picker" width="32%"/>
+  <img src="docs/assets/screenshots/component-playground-bottom-sheet.png" alt="ComposeUIKit reusable modal bottom sheet" width="32%"/>
+</p>
+
+<p align="center">
+  <em>Buttons and inputs · Selection controls · Feedback and bottom sheet</em>
+</p>
 
 ## Highlights
 
@@ -237,7 +245,7 @@ This produces a GitHub prerelease; it does not publish to Maven Central. Maven C
 - [x] Interactive sample playground
 - [x] Architecture, theming, component, and accessibility docs
 - [x] Expand component previews and interaction tests
-- [ ] Capture and review sample screenshots for README
+- [x] Capture and add sample screenshots to README
 - [x] API compatibility checks and tagged GitHub prerelease workflow
 - [ ] Publish a stable artifact to Maven Central
 
