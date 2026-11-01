@@ -38,12 +38,12 @@ fun <T> UIKitDropdownField(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it && enabled },
-        modifier = modifier
+        modifier = Modifier
     ) {
         OutlinedTextField(
             value = selectedOption?.let(optionLabel).orEmpty(),
             onValueChange = {},
-            modifier = Modifier
+            modifier = modifier
                 .menuAnchor()
                 .fillMaxWidth(),
             readOnly = true,
