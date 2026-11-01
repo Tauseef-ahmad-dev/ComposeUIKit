@@ -60,7 +60,11 @@ mavenPublishing {
 
     // Upload to Central Portal, but leave the final Publish action for a human review.
     publishToMavenCentral()
-    signAllPublications()
+    // Sign artifacts only when the in-memory signing key is supplied (e.g. the Maven Central workflow).
+    // Local Maven publication and regular CI builds should not require release credentials.
+    if (providers.gradleProperty("signingInMemoryKey").isPresent) {
+        signAllPublications()
+    }
 
     pom {
         name.set("ComposeUIKit")
