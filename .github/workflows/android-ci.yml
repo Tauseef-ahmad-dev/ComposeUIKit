@@ -81,15 +81,39 @@ jobs:
         timeout-minutes: 25
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 34
           target: google_apis
           arch: x86_64
           profile: pixel_2
           disable-animations: true
           emulator-boot-timeout: 900
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none -memory 4096 -cores 2
           script: |
-            set -eu
+            set -euo pipefail
+
+            # The runner waits for sys.boot_completed, which can be reported
+            # before Android's package manager is ready on a cold hosted AVD.
+            adb wait-for-device
+            package_ready=false
+            for attempt in $(seq 1 90); do
+              if adb shell service check package 2>/dev/null | grep -q "found"; then
+                package_ready=true
+                break
+              fi
+              adb reconnect offline >/dev/null 2>&1 || true
+              sleep 2
+            done
+
+            if [ "$package_ready" != "true" ]; then
+              echo "Android package manager did not become ready."
+              adb devices -l || true
+              adb shell getprop sys.boot_completed || true
+              adb shell service list | grep -E "package|activity" || true
+              adb logcat -b all -d | grep -Ei "system_server|PackageManager|FATAL EXCEPTION|fatal signal" | tail -150 || true
+              exit 1
+            fi
+
+            adb shell cmd package list packages >/dev/null
             ./gradlew :sample:connectedDebugAndroidTest :sample:assembleDebug
 
             if [ "$CAPTURE_SCREENSHOTS" = "true" ]; then
