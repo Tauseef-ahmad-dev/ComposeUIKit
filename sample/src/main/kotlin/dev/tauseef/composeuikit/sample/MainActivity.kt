@@ -151,7 +151,7 @@ class MainActivity : ComponentActivity() {
                                     label = "Full name",
                                     placeholder = "Enter your name",
                                     helperText = "This is a state-hoisted input.",
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier.fillMaxWidth().testTag("sample-name-field")
                                 )
                                 UIKitTextField(
                                     value = validationText,
