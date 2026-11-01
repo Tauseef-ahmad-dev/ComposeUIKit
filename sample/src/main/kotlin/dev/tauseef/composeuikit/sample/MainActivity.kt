@@ -182,7 +182,7 @@ class MainActivity : ComponentActivity() {
                                     onOptionSelected = { category = it },
                                     optionLabel = { it },
                                     label = "Category",
-                                    modifier = Modifier.fillMaxWidth().testTag("sample-category-dropdown")
+                                    modifier = Modifier.fillMaxWidth()
                                 )
                                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Text("Filters", style = MaterialTheme.typography.titleSmall)
