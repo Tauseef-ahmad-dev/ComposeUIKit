@@ -77,6 +77,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
 
+      - name: Enable KVM access
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Run sample UI tests and capture README screenshots
         timeout-minutes: 25
         uses: reactivecircus/android-emulator-runner@v2
@@ -85,74 +91,12 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_2
+          cores: 2
+          ram-size: 4096M
           disable-animations: true
           emulator-boot-timeout: 900
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none -memory 4096 -cores 2
-          script: |
-            set -euo pipefail
-
-            # The runner waits for sys.boot_completed, which can be reported
-            # before Android's package manager is ready on a cold hosted AVD.
-            adb wait-for-device
-            package_ready=false
-            for attempt in $(seq 1 90); do
-              if adb shell service check package 2>/dev/null | grep -q "found"; then
-                package_ready=true
-                break
-              fi
-              adb reconnect offline >/dev/null 2>&1 || true
-              sleep 2
-            done
-
-            if [ "$package_ready" != "true" ]; then
-              echo "Android package manager did not become ready."
-              adb devices -l || true
-              adb shell getprop sys.boot_completed || true
-              adb shell service list | grep -E "package|activity" || true
-              adb logcat -b all -d | grep -Ei "system_server|PackageManager|FATAL EXCEPTION|fatal signal" | tail -150 || true
-              exit 1
-            fi
-
-            adb shell cmd package list packages >/dev/null
-            ./gradlew :sample:connectedDebugAndroidTest :sample:assembleDebug
-
-            if [ "$CAPTURE_SCREENSHOTS" = "true" ]; then
-              adb shell wm size 1080x2400
-              adb shell wm density 420
-              adb shell settings put system font_scale 1.0
-              adb shell input keyevent 82
-              adb shell am force-stop dev.tauseef.composeuikit.sample
-              adb logcat -c
-              adb shell am start -W -n dev.tauseef.composeuikit.sample/.MainActivity
-              sleep 3
-              adb shell uiautomator dump /sdcard/composeuikit-screen-1.xml
-              adb exec-out cat /sdcard/composeuikit-screen-1.xml > /tmp/composeuikit-screen-1.xml
-              if ! grep -q "ComposeUIKit" /tmp/composeuikit-screen-1.xml || ! grep -q "Primary action" /tmp/composeuikit-screen-1.xml; then
-                echo "Sample app content was not visible on the emulator."
-                adb logcat -d -t 3000 | grep -E "FATAL EXCEPTION|AndroidRuntime|dev.tauseef.composeuikit.sample|Exception" | tail -100 || true
-                exit 1
-              fi
-
-              mkdir -p docs/assets/screenshots
-              adb exec-out screencap -p > docs/assets/screenshots/component-overview.png
-
-              adb shell input swipe 540 2050 540 600 450
-              sleep 2
-              adb shell uiautomator dump /sdcard/composeuikit-screen-2.xml
-              adb exec-out cat /sdcard/composeuikit-screen-2.xml > /tmp/composeuikit-screen-2.xml
-              if ! grep -q "Category" /tmp/composeuikit-screen-2.xml; then
-                echo "Selection controls were not visible after scrolling the sample app."
-                exit 1
-              fi
-              adb exec-out screencap -p > docs/assets/screenshots/forms-and-selection.png
-
-              test -s docs/assets/screenshots/component-overview.png
-              test -s docs/assets/screenshots/forms-and-selection.png
-              if cmp -s docs/assets/screenshots/component-overview.png docs/assets/screenshots/forms-and-selection.png; then
-                echo "Screenshot captures are identical; refusing to publish duplicates."
-                exit 1
-              fi
-            fi
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          script: bash .github/scripts/run-emulator-validation.sh
 
       - name: Upload emulator screenshots
         if: env.CAPTURE_SCREENSHOTS == 'true'
@@ -162,34 +106,3 @@ jobs:
           path: docs/assets/screenshots/*.png
           if-no-files-found: error
           retention-days: 1
-
-  commit-emulator-screenshots:
-    needs: [build, android-emulator-validation]
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[capture-screenshots]')))
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout main
-        uses: actions/checkout@v7
-        with:
-          ref: main
-
-      - name: Download emulator screenshots
-        uses: actions/download-artifact@v8
-        with:
-          name: composeuikit-readme-screenshots
-          path: docs/assets/screenshots
-
-      - name: Commit emulator screenshots
-        run: |
-          sed -i 's/- \[ \] Capture real emulator screenshots for README/- [x] Capture real emulator screenshots for README/' README.md
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/assets/screenshots README.md
-          if git diff --cached --quiet; then
-            echo "No screenshot changes to commit."
-          else
-            git commit -m "docs: add Android emulator screenshots [skip ci]"
-            git push origin HEAD:main
-          fi

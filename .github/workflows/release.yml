@@ -51,11 +51,24 @@ jobs:
       - name: Prepare release assets
         shell: bash
         run: |
+          set -euo pipefail
           VERSION="${GITHUB_REF_NAME#v}"
           SOURCE="composeuikit/build/repo/dev/tauseef/composeuikit/$VERSION"
+          REQUIRED_ASSETS=(
+            "composeuikit-$VERSION.aar"
+            "composeuikit-$VERSION-sources.jar"
+            "composeuikit-$VERSION.pom"
+            "composeuikit-$VERSION.module"
+          )
+
           test -d "$SOURCE"
           mkdir -p release-assets
-          cp "$SOURCE"/* release-assets/
+          for asset in "${REQUIRED_ASSETS[@]}"; do
+            test -f "$SOURCE/$asset"
+            cp "$SOURCE/$asset" release-assets/
+          done
+
+          test "$(find release-assets -maxdepth 1 -type f | wc -l)" -eq "${#REQUIRED_ASSETS[@]}"
           ls -lah release-assets
 
       - name: Create GitHub prerelease
