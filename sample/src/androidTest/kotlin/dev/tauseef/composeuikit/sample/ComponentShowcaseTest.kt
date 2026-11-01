@@ -70,8 +70,10 @@ class ComponentShowcaseTest {
         scrollTo("Category")
         composeRule.onNodeWithTag("sample-category-dropdown").performClick()
         composeRule.onNodeWithText("Development").performClick()
-        composeRule.onNodeWithTag("sample-category-dropdown").assertTextEquals("Development")
-        composeRule.onNodeWithText("Development").assertIsDisplayed()
+        // OutlinedTextField exposes both its label and editable text in semantics.
+        // Match the selected value instead of requiring an exact full semantics text list.
+        composeRule.onNodeWithTag("sample-category-dropdown")
+            .assert(hasText("Development"))
     }
 
     @Test
