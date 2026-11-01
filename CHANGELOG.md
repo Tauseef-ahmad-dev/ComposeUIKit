@@ -23,7 +23,10 @@ All notable project changes are documented here.
 - Committed the Kotlin binary API baseline and enforced compatibility checks in CI.
 - Improved dark-theme primary button text contrast and added a WCAG AA contrast regression test.
 - Expanded emulator tests for accessibility descriptions, validation errors, and empty-state recovery actions.
-- Isolated screenshot publishing into a main-only job with write permissions; emulator validation remains read-only.
+- Configured main-only screenshot capture as a read-only artifact for manual review and commit.
+- Fixed emulator validation so the emulator action invokes one Bash script rather than splitting shell control flow into individual POSIX shell commands.
+- Added bounded Package Manager readiness diagnostics, KVM access setup, and PNG dimension/hash validation for generated emulator screenshots.
+- Require the AAR, sources JAR, POM, and Gradle module metadata before attaching prerelease assets.
 
 ## 0.1.0 — Initial development scaffold
 
