@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -72,7 +73,7 @@ class ComponentShowcaseTest {
         // OutlinedTextField exposes both its label and editable text in semantics.
         // Match the selected value instead of requiring an exact full semantics text list.
         composeRule.onNodeWithTag("sample-category-dropdown")
-            .assert(hasText("Development"))
+            .assertTextContains("Development")
     }
 
     @Test
